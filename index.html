@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-black">
 
 <head>
     <meta charset="UTF-8">
@@ -7,31 +7,26 @@
     <title>RoadBuilder</title>
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
 
+    <script src="variables.js"></script>
     <script src="script.js"></script>
+
+    <!-- Libs -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+
     <style>
         * {
             transition: 0.1s ease;
-            color: white;
         }
     </style>
 </head>
 
-<body class="flex flex-col bg-no-repeat bg-cover min-h-svh">
+<body class="flex flex-col bg-no-repeat bg-size-auto bg-fixed bg-position-[center] min-h-svh text-white">
     <include src="header.html"></include>
 
     <main class="flex flex-1 mx-10 w-full h-full mx-auto max-w-[1000px]">
         <include id="page"></include>
-
-        <script>
-            var body = document.querySelectorAll("body")[0];
-            var page = document.getElementById("page");
-
-            // Load Page
-            var pageName = urlParams.get("page") ?? "store";
-            page.setAttribute("src", "Pages/" + pageName + ".html") // Load page's HTML
-            body.style.backgroundImage = "linear-gradient(rgba(34,34,34,1), rgba(34,34,34,.95)), url(Backgrounds/"+pageName+".png)"; // Load page's Background Image
-        </script>
     </main>
 </body>
 
