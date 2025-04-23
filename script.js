@@ -5,7 +5,7 @@ window.addEventListener("load", async () => {
 
     await Include();
     await Icons();
-    await main();
+    await loadHyperLinks();
 });
 
 // Includes
@@ -75,12 +75,6 @@ async function Icons() {
             console.error(`Failed to load icon "${iconName}":`, err);
         }
     }
-}
-
-// Main
-
-async function main() {
-    await loadHyperLinks();
 }
 
 async function loadPage() {
