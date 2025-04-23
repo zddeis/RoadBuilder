@@ -98,8 +98,6 @@ async function loadHyperLinks() {
     Object.entries(hyperlinks).forEach(([key, value]) => {
         var elements = document.getElementsByName(key);
 
-        console.log(elements.length);
-
         elements.forEach(element => {
             element.href = value;
         });
