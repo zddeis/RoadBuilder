@@ -1,5 +1,85 @@
-<div class="flex flex-col m-auto w-full h-full max-w-[600px] pb-24">
-    <h1 class="w-full text-center text-4xl font-bold">Hmm. This page is still empty</h1>
+<div class="flex flex-col m-auto w-full h-full max-w-[1250px] pb-24">
+    <h1 class="w-full text-center text-5xl font-bold p-2">Roadmap - <span id="version"></span></h1>
 
-    <!-- <script>loadRoadmap();</script> -->
+    <div
+        class="flex flex-col justify-between min-h-[300px] px-4 py-4 rounded-4xl shadow-md bg-[#202020A0] bg-cover bg-size-[300px] shadow-neutral-900">
+
+
+        <div id="roadmap" class="my-auto">
+            <h1 class="text-3xl text-center">Loading...</h1>
+        </div>
+    </div>
 </div>
+
+<script>
+    (async () => {
+        query("#version")[0].textContent = "v" + (version + 0.1) + ".0";
+        query("#roadmap")[0].innerHTML = await loadRoadmap();
+    })();
+</script>
+
+<style>
+    table {
+        border-radius: 20px;
+        width: 100%;
+        border-spacing: 5px;
+        border-collapse: separate;
+        background-color: hsl(0, 0%, 20%);
+    }
+
+    th,
+    td {
+        padding: 5px;
+        margin: 2px;
+        border-radius: 5px;
+        height: 34px;
+    }
+
+    th {
+        background-color: hsl(200, 70%, 45%);
+    }
+
+    td {
+        background-color: hsl(0, 0%, 15%);
+    }
+
+
+
+    td:nth-child(1) {
+        /* Planned */
+        background-color: hsl(0, 0%, 15%);
+    }
+
+    td:nth-child(2) {
+        /* To do */
+        background-color: hsl(0, 50%, 35%);
+    }
+
+    td:nth-child(3) {
+        /* Working on */
+        background-color: hsl(50, 50%, 35%);
+    }
+
+    td:nth-child(4) {
+        /* Done */
+        background-color: hsl(90, 50%, 35%);
+    }
+
+    /* BORDER-RADIUS */
+
+    th:nth-child(1) {
+        border-top-left-radius: 15px;
+    }
+    
+    th:nth-child(4) {
+        border-top-right-radius: 15px;
+    }
+    
+    table tr:last-child td:nth-child(1) {
+        border-bottom-left-radius: 15px;
+    }
+    
+    table tr:last-child td:last-child {
+        border-bottom-right-radius: 15px;
+    }
+</style>

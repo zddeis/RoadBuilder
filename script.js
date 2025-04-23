@@ -8,42 +8,50 @@ window.addEventListener("load", async () => {
     await loadHyperLinks();
 });
 
-// Includes
+// Include
 async function Include() {
     const includeTags = document.querySelectorAll("include[src]");
+    const scriptsToRun = [];
+
     for (const el of includeTags) {
         const file = el.getAttribute("src");
         try {
             const res = await fetch(file);
             if (res.ok) {
                 const html = await res.text();
-                
+
                 // Create a temporary container to parse HTML
                 const temp = document.createElement('div');
                 temp.innerHTML = html;
 
-                // Extract and execute scripts
+                // Extract scripts for later execution
                 const scripts = temp.querySelectorAll('script');
-                scripts.forEach(script => {
-                    const newScript = document.createElement('script');
-                    if (script.src) {
-                        // External script (load via src)
-                        newScript.src = script.src;
-                    } else {
-                        // Inline script (copy content)
-                        newScript.textContent = script.textContent;
-                    }
-                    document.body.appendChild(newScript); // Execute in global scope
-                });
+                scripts.forEach(script => script.remove()); // Remove scripts from HTML
 
-                // Replace the <include> with the parsed HTML (without scripts)
+                // Replace the <include> with the parsed HTML (no scripts)
                 el.outerHTML = temp.innerHTML;
+
+                // Save scripts for later
+                scripts.forEach(script => {
+                    scriptsToRun.push(script);
+                });
             } else {
                 el.outerHTML = `<!-- Failed to load ${file} -->`;
             }
         } catch (err) {
             el.outerHTML = `<!-- Error loading ${file}: ${err.message} -->`;
         }
+    }
+
+    // Execute scripts after all includes are done
+    for (const script of scriptsToRun) {
+        const newScript = document.createElement('script');
+        if (script.src) {
+            newScript.src = script.src;
+        } else {
+            newScript.textContent = script.textContent;
+        }
+        document.body.appendChild(newScript);
     }
 }
 
@@ -78,9 +86,9 @@ async function Icons() {
 }
 
 async function loadPage() {
-    var body = document.querySelectorAll("body")[0];
-    var page = document.getElementById("page");
-    
+    var body = query("body")[0];
+    var page = query("#page")[0];
+
     // Load Page
     var pageName = urlParams.get("page") ?? "store";
     page.setAttribute("src", "Pages/" + pageName + ".html") // Load page's HTML
@@ -90,7 +98,7 @@ async function loadPage() {
 async function loadHyperLinks() {
 
     Object.entries(hyperlinks).forEach(([key, value]) => {
-        var elements = document.getElementsByName(key);
+        var elements = query(`[name=${key}]`);
 
         elements.forEach(element => {
             element.href = value;
@@ -98,14 +106,18 @@ async function loadHyperLinks() {
     });
 }
 
-function loadRoadmap() {
-
-    fetch(roadmapSheet)
+async function loadRoadmap() {
+    return fetch(roadmapSheet)
         .then(response => response.text())
         .then(csvText => {
             const rows = csvText.split("\n").map(row => row.split(","));
             const table = document.createElement("table");
 
+            while (rows.length < 8) {
+                rows.push(new Array(rows[0].length).fill(''));
+            }
+
+            // Create the table rows
             rows.forEach((row, index) => {
                 const tr = document.createElement("tr");
                 row.forEach(cell => {
@@ -115,12 +127,26 @@ function loadRoadmap() {
                 });
                 table.appendChild(tr);
             });
-            
-            echo(table.outerHTML);
+
+            return table.outerHTML;
         });
 }
 
+
 // echo
-function echo(html) {
-    document.body.insertAdjacentHTML('beforeend', html);
+function echo(html, element) {
+    if (typeof element == "string") {
+        element = query(element);
+    }
+
+    if (element) {
+        element.insertAdjacentHTML('beforeend', html);
+        // document.getElementById("roadmap").insertAdjacentHTML('beforeend', html);
+    } else {
+        document.body.insertAdjacentHTML('beforeend', html);
+    }
 }
+
+
+// query
+const query = (selector, context = document) => Array.from(context.querySelectorAll(selector));
