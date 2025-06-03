@@ -13,7 +13,7 @@
 
 <script>
     (async () => {
-        query("#version")[0].textContent = "v" + (version + 0.1) + ".0";
+        query("#version")[0].textContent = "v" + roadMapVersion;
         query("#roadmap")[0].innerHTML = await loadRoadmap();
     })();
 </script>
