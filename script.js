@@ -92,7 +92,7 @@ async function loadPage() {
     // Load Page
     var pageName = urlParams.get("page") ?? "store";
     page.setAttribute("src", "Pages/" + pageName + ".html") // Load page's HTML
-    body.style.backgroundImage = "linear-gradient(rgba(34,34,34,1), rgba(34,34,34,.95)), url(Backgrounds/" + pageName + ".png)"; // Load page's Background Image
+    body.style.backgroundImage = "linear-gradient(rgba(34,34,34,0.95), rgba(34,34,34,0.75)), url(Backgrounds/" + pageName + ".png)"; // Load page's Background Image
 }
 
 async function loadHyperLinks() {
